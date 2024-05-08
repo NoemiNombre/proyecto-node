@@ -4,7 +4,7 @@ const User = require("../models/User");
 function getCurrentUser(req, res) {
     new Promise((resolve, reject) => {
       // El middleware de autenticación (verificarToken) ya habrá almacenado el ID de usuario en req.userId
-      const userId = req.userId;
+      const userId = req.id;
   
       // Busca al usuario en la base de datos utilizando el ID de usuario
       User.findById(userId)

@@ -12,7 +12,7 @@ const sessionRoutes=require("./routes/sessionRoutes");
 
 // creamos una instacia de express
 const app = express();
-const PORT = 3300;
+const PORT = 3000;
 
 // middleware
 app.use(express.json())   
@@ -21,8 +21,8 @@ app.use(express.json())
 app.use("/users", userRoutes) 
 
 // rutas de autentificacion
-app.use("/auth",authRoutes)
-app.use("/session",sessionRoutes)
+app.use("/",authRoutes)
+app.use("/",sessionRoutes)
 
 
 

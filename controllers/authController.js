@@ -1,5 +1,9 @@
 require('dotenv').config();
-const authservice = require("../services/authService")
+
+const bcrypt = require('bcrypt');
+
+
+
 
 const User = require("../models/User");
 const Sessions = require("../models/accesstoken")
@@ -22,59 +26,73 @@ var controller = {
 
     User.findOne({ email: data.email })
       .then(user => {
-        if (data.password == user.password) {
+        
+        console.log(data.password);
+        console.log(user.password);
+        // compara la contrasela haseada en login 
+        bcrypt.compare(data.password, user.password, function (err, result) {
+          if (result) {
 
-          const payload = {
-            usuario: user
-          }
+            const payload = {
+              usuario: user
+            }
 
-          let access_token = jwt.sign(payload, process.env.key, {
-            expiresIn: '1d'
-          });
-
-          let today = new Date().toISOString();
-
-
-          let update_session = {
-            user: user.email,
-            key: access_token,
-            creationDate: today,
-            expirationDate: '1d',
-            active: true
-
-          }
-
-          Sessions.findOneAndUpdate({ user: user.email }, update_session, { upsert: true, new: true })
-            .then(session => {
-              if (!session) {
-                return res.status(401).send({
-                  status: 401,
-                  message: "Session no encontrada",
-
-                });
-              }
-              return res.status(200).send({
-                satus: 200,
-                message: "Login exitoso",
-                token: access_token
-              })
-
-            })
-            .catch(error => {
-              console.error(error);
-              return res.status(500).send({
-                status: 500,
-                message: "error detectado",
-              });
+            let access_token = jwt.sign(payload, process.env.key, {
+              expiresIn: '1d'
             });
 
-        } else {
-          return res.status(400).send({
-            satus: 400,
-            message: "Datos no validos"
-          })
+            let today = new Date().toISOString();
 
-        }
+
+            let update_session = {
+              user: user.email,
+              key: access_token,
+              creationDate: today,
+              expirationDate: '1d',
+              active: true
+
+            }
+
+            Sessions.findOneAndUpdate({ user: user.email }, update_session, { upsert: true, new: true })
+              .then(session => {
+                if (!session) {
+                  return res.status(401).send({
+                    status: 401,
+                    message: "Session no encontrada",
+
+                  });
+                }
+                return res.status(200).send({
+                  satus: 200,
+                  message: "Login exitoso",
+                  token: access_token
+                })
+
+              })
+              .catch(error => {
+                console.error(error);
+                return res.status(500).send({
+                  status: 500,
+                  message: "error detectado",
+                });
+              });
+
+          } else {
+            return res.status(400).send({
+              satus: 400,
+              message: "Datos no validos"
+            })
+
+          }
+        })
+        // .then((match)=>{
+        //   if(!match){
+        //     return res.status(401).send({
+        //       status:401,
+        //       message:"credenciales Invalidas"
+        //     })
+        //   }
+        // })
 
       })
       .catch(error => {
@@ -83,16 +101,44 @@ var controller = {
           message: "Datos no validos",
 
         });
-      })
+      });
+
+
 
   },
 
   // Controlador para cerrar la sesion
-  logout: function () {
-    localStorage.removeItem("token");
-    res.status(200).json({
-      message: "Sesion cerrada exitosamente"
-    });
+  logout: function (req, res) {
+
+
+    const token = req.headers['x-proyecto-accesstoken'];
+
+    Sessions.findOneAndDelete({ user: req.decoded.usuario.email, key: token, active: true })
+      .then(session => {
+
+        if (!session) {
+          return res.status(401).send({
+            status: 401,
+            message: "Token no valido"
+          })
+        }
+        return res.status(200).send({
+          status: 200,
+          message: "Session Finalizada"
+        })
+
+      })
+      .catch(error => {
+        console.error(error);
+        return res.status(500).send({
+          status: 500,
+          message: "Token Invalido",
+        });
+      });
+
+    // next();
+
+
   }
 
 }

@@ -1,8 +1,9 @@
 // importamos mooongoo para crear la coneccion 
 const mongoose = require("mongoose")
+require('dotenv').config();
 
 // conectamos la db usando metodo conecct()de moongoo
-const mongoUrl ="mongodb+srv://samiacamacho17:celeste7Dnoemi@cluster0.r1kalwn.mongodb.net/proyecto"
+const mongoUrl = process.env.MONGOURL
 
 //  Funcion para conectarnos a la DB
 
