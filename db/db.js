@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 require('dotenv').config();
 
 // conectamos la db usando metodo conecct()de moongoo
-const mongoUrl = process.env.MONGOURL
+const mongoUrl = "mongodb+srv://"+process.env.USERDATABASE+":"+process.env.PASSWORDDATABASE+"@"+process.env.HOSTDATABASE+"/"+process.env.DATABASE
 
 //  Funcion para conectarnos a la DB
 
