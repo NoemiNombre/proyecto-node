@@ -23,7 +23,7 @@ var controller = {
 
     User.findOne({ email: data.email })
       .then(user => {
-        
+
         console.log(data.password);
         console.log(user.password);
         // compara la contrasela haseada en login 
@@ -132,12 +132,7 @@ var controller = {
           message: "Token Invalido",
         });
       });
-
-    // next();
-
-
   }
-
 }
 
 module.exports = {

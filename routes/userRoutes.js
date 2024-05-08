@@ -35,5 +35,8 @@ router.put("/:id",middleware.tokenVerify,[
 
 // delete
 router.delete("/:id",middleware.tokenVerify, userController.deleteUser) // Ruta para eliminar un usuario
+
+
+
 // Exportamos el router para su uso en otras partes
 module.exports = router
