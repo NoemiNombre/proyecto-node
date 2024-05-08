@@ -12,7 +12,7 @@ const sessionRoutes=require("./routes/sessionRoutes");
 
 // creamos una instacia de express
 const app = express();
-const PORT = 3000;
+const PORT = 3300;
 
 // middleware
 app.use(express.json())   
