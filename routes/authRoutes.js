@@ -4,7 +4,8 @@ const express = require("express");
 const {validationResult, body} = require('express-validator');
 const router = express.Router()
 
-const testCacheController= require("../controllers/cacheController")
+const testJobController =require("../controllers/testJob");
+const testCacheController= require("../controllers/cacheController");
 const authController = require("../controllers/authController");
 const middleware = require("../middleware/verifyToken");
 
@@ -27,6 +28,7 @@ router.post("/logout",middleware.tokenVerify, authController.controller.logout);
 // test cache
 router.get("/testcache",cache.route(), testCacheController.testCache)
 
-
+// test jobs 
+router.get("/testjob",testJobController.test_job)
 
 module.exports = router;

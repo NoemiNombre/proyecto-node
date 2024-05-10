@@ -1,5 +1,6 @@
 const Queue = require("bull");
 
+
 const myQueue= new Queue('myQueue',{
     redis:{
         host: 'redis-11156.c308.sa-east-1-1.ec2.redns.redis-cloud.com',
